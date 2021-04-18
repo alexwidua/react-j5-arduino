@@ -9,20 +9,23 @@ const io = require('socket.io')(server, {
 })
 
 // Setup Johnny-Five
-const { Board, Sensor } = require('johnny-five')
+const { Board, Accelerometer } = require('johnny-five')
 const board = new Board()
 
 // Initialize board and sensors
-board.on('ready', () => {
-	// Make sure that pin matches your setup
-	const poti = new Sensor('A0')
+board.on('ready', function () {
+	const accelerometer = new Accelerometer({
+		// Make sure that pins match your setup
+		pins: ['A0', 'A1', 'A2'],
+		autoCalibrate: true
+	})
 
 	// Listen for serial changes and emit socket event to React client
-	poti.on('change', () => {
-		const { raw } = poti
-		console.log('Value: ' + raw)
+	accelerometer.on('change', () => {
+		const { roll } = accelerometer
+		console.log('roll: ' + roll)
 		// Emit event TO React client
-		io.emit('data_change', raw)
+		io.emit('data_change', roll)
 	})
 })
 

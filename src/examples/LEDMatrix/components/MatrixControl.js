@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react'
 
 /**
  * This component stores the matrix state locally,
@@ -11,56 +11,59 @@ import React, { useEffect, useState } from "react"
  */
 
 const Matrix = (props) => {
-    const initState = [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-    ]
+	const initState = [
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0]
+	]
 
-    const [matrixMap, setMatrixMap] = useState(initState)
+	const [matrixMap, setMatrixMap] = useState(initState)
 
-    useEffect(() => {
-        // join array so it becomes readable for johnny-five
-        const joinedMap = matrixMap.map((item) => item.join(""))
-        props.onMatrixChange(joinedMap)
-    }, [matrixMap])
+	useEffect(() => {
+		// Join array so it becomes readable for johnny-five
+		const joinedMap = matrixMap.map((item) => item.join(''))
+		// Elevate function and matrixMap state to parent component
+		props.onMatrixChange(joinedMap)
+	}, [matrixMap])
 
-    const handleChange = (index, subindex) => {
-        const newMap = [...matrixMap]
-        ;[newMap[index][subindex]] = [newMap[index][subindex] == 0 ? 1 : 0]
-        setMatrixMap(newMap)
-    }
+	const handleChange = (index, subindex) => {
+		const newMap = [...matrixMap]
+		;[newMap[index][subindex]] = [newMap[index][subindex] == 0 ? 1 : 0]
+		setMatrixMap(newMap)
+	}
 
-    const clearMap = () => {
-        setMatrixMap(initState)
-    }
+	const clearMap = () => {
+		setMatrixMap(initState)
+	}
 
-    return (
-        <div>
-            {matrixMap.map((item, index) => {
-                return (
-                    <div key={index}>
-                        {item.map((subitem, subindex) => {
-                            return (
-                                <input
-                                    type="checkbox"
-                                    key={subindex}
-                                    checked={subitem}
-                                    onChange={() => handleChange(index, subindex)}
-                                />
-                            )
-                        })}
-                    </div>
-                )
-            })}
-            <button onClick={() => clearMap()}>Clear</button>
-        </div>
-    )
+	return (
+		<div>
+			{matrixMap.map((item, index) => {
+				return (
+					<div key={index}>
+						{item.map((subitem, subindex) => {
+							return (
+								<input
+									type="checkbox"
+									key={subindex}
+									checked={subitem}
+									onChange={() =>
+										handleChange(index, subindex)
+									}
+								/>
+							)
+						})}
+					</div>
+				)
+			})}
+			<button onClick={() => clearMap()}>Clear</button>
+		</div>
+	)
 }
 
 export default Matrix
